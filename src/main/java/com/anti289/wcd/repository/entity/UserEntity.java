@@ -15,6 +15,10 @@ public class UserEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
+
+	@Column(unique = true)
+	private String externalId;
+
 	@Column(unique = true)
 	private String name;
 

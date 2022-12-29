@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.anti289.base.exception.ConflictServiceException;
 import com.anti289.wcd.repository.UserRepositoryService;
 import com.anti289.wcd.dto.User;
 
@@ -25,4 +26,12 @@ public class UserService {
 	public List<User> getAllUsers() {
 		return userRepositoryService.getUsers();
 	}
+
+	public User createUser(String name) throws ConflictServiceException {
+		if (userRepositoryService.getUser(name) != null) {
+			throw new ConflictServiceException("name not available");
+		}
+		return userRepositoryService.createUser(name);
+	}
+
 }

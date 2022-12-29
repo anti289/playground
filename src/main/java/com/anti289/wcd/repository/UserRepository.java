@@ -10,4 +10,7 @@ import com.anti289.wcd.repository.entity.UserEntity;
 interface UserRepository extends CrudRepository<UserEntity, Long> {
 
 	UserEntity findByName(String name);
+
+	UserEntity findByNameAndExternalId(String name, String externalId);
+
 }

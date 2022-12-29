@@ -1,29 +1,42 @@
 package com.anti289.wcd.endpoint;
 
 import static io.restassured.RestAssured.given;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.anti289.wcd.Application;
+import com.anti289.wcd.endpoint.request.UserCreateRequest;
 import com.anti289.wcd.endpoint.response.UserListResponse;
+import com.anti289.wcd.endpoint.response.UserResponse;
+import com.anti289.wcd.repository.UserRepositoryService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.restassured.response.Response;
 
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ContextConfiguration(classes = {Application.class})
-public class UserRestEndpointTest {
+@ContextConfiguration(classes = {Application.class, UserRepositoryService.class})
+class UserRestEndpointTest {
 
 	@Value("${local.server.port}")
 	private int port;
+
+	@Autowired
+	private UserRepositoryService userRepositoryService;
+
+	private static final ObjectMapper OM = new ObjectMapper();
 
 	// TODO add OpenApi validation
 	//	private final OpenApiValidationFilter validationFilter = new OpenApiValidationFilter("/static/api.yaml");
@@ -36,7 +49,41 @@ public class UserRestEndpointTest {
 						.statusCode(HttpStatus.OK.value())
 						.extract()
 						.as(UserListResponse.class);
-		assertTrue(actualDTO.getUsers().size() == 0);
+		assertEquals(0, actualDTO.users().size());
+	}
+
+	@Test
+	void testCreate() throws JsonProcessingException {
+		String name = "test name";
+		UserResponse actualDTO =
+				callCreateUser(port, name)
+						.then()
+						.statusCode(HttpStatus.OK.value())
+						.extract()
+						.as(UserResponse.class);
+		assertEquals(name, actualDTO.name());
+		assertNotNull(actualDTO.externalId());
+
+		UserListResponse list =
+				callGetAllUsers(port)
+						.then()
+						.statusCode(HttpStatus.OK.value())
+						.extract()
+						.as(UserListResponse.class);
+		assertEquals(1, list.users().size());
+		assertEquals(actualDTO, list.users().get(0));
+
+		userRepositoryService.deleteUser(actualDTO.name(), actualDTO.externalId());
+	}
+
+	static Response callCreateUser(int port, String name) throws JsonProcessingException {
+		return given()
+				.port(port)
+//						.filter(validationFilter)
+				.when()
+				.contentType(MediaType.APPLICATION_JSON_VALUE)
+				.body(OM.writeValueAsString(new UserCreateRequest(name)))
+				.post("users/create");
 	}
 
 	/**
