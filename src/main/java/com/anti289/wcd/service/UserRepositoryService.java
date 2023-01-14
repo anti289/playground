@@ -11,6 +11,7 @@ import com.anti289.wcd.mapper.UserMapper;
 import com.anti289.wcd.repository.entity.UserEntity;
 
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 
 /**
@@ -20,12 +21,12 @@ import lombok.AllArgsConstructor;
  * @since 1.0.0
  */
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserRepositoryService {
 
-	private UserRepository userRepository;
+	private final UserRepository userRepository;
 
-	private UserMapper userMapper;
+	private final UserMapper userMapper;
 
 	/**
 	 * Find all users that registered here, ever
@@ -52,19 +53,6 @@ public class UserRepositoryService {
 	}
 
 	/**
-	 * Create a new user with the given name
-	 *
-	 * @param name of the new user
-	 * @return the {@link User} dto
-	 */
-	public User createUser(String name) {
-		UserEntity user = new UserEntity();
-		user.setName(name);
-		user.setExternalId(UUID.randomUUID().toString());
-		return userMapper.map(userRepository.save(user));
-	}
-
-	/**
 	 * Delete an existing user identified by name and external ID
 	 *
 	 * @param name       of the user to be deleted
@@ -77,4 +65,7 @@ public class UserRepositoryService {
 		}
 	}
 
+	public List<User> findAll() {
+		return userMapper.map(userRepository.findAll());
+	}
 }
