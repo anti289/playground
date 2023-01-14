@@ -18,4 +18,5 @@ public interface UserMapper {
 
 	List<UserResponse> map(List<User> all);
 
+	List<User> map(Iterable<UserEntity> users);
 }

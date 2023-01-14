@@ -14,13 +14,12 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.anti289.wcd.Application;
+import com.anti289.Application;
 import com.anti289.wcd.endpoint.request.UserCreateRequest;
 import com.anti289.wcd.endpoint.response.UserListResponse;
 import com.anti289.wcd.endpoint.response.UserResponse;
-import com.anti289.wcd.repository.UserRepositoryService;
+import com.anti289.wcd.service.UserRepositoryService;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.restassured.response.Response;
 
@@ -35,8 +34,6 @@ class UserRestEndpointTest {
 
 	@Autowired
 	private UserRepositoryService userRepositoryService;
-
-	private static final ObjectMapper OM = new ObjectMapper();
 
 	// TODO add OpenApi validation
 	//	private final OpenApiValidationFilter validationFilter = new OpenApiValidationFilter("/static/api.yaml");
@@ -82,7 +79,7 @@ class UserRestEndpointTest {
 //						.filter(validationFilter)
 				.when()
 				.contentType(MediaType.APPLICATION_JSON_VALUE)
-				.body(OM.writeValueAsString(new UserCreateRequest(name)))
+				.body(new UserCreateRequest(name))
 				.post("users/create");
 	}
 

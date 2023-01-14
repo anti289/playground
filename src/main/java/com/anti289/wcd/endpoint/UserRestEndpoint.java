@@ -17,7 +17,7 @@ import com.anti289.wcd.endpoint.response.UserResponse;
 import com.anti289.wcd.mapper.UserMapper;
 import com.anti289.wcd.service.UserService;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 
 /**
@@ -28,14 +28,15 @@ import lombok.AllArgsConstructor;
  */
 @RestController
 @RequestMapping(path = "users")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserRestEndpoint {
 
-	private UserService userService;
-	private UserMapper userMapper;
+	private final UserService userService;
+	private final UserMapper userMapper;
 
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public UserListResponse list() {
+		// TODO check user roles for sufficient authorization
 		List<UserResponse> userResponse = userMapper.map(userService.getAllUsers());
 		return new UserListResponse(userResponse);
 	}

@@ -1,4 +1,4 @@
-package com.anti289.wcd.repository;
+package com.anti289.wcd.service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.anti289.wcd.dto.User;
 import com.anti289.wcd.mapper.UserMapper;
+import com.anti289.wcd.repository.UserRepository;
 import com.anti289.wcd.repository.entity.UserEntity;
 
 import lombok.AllArgsConstructor;

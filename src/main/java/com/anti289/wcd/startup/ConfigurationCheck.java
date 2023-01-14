@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import com.anti289.wcd.config.AConfig;
 
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 
 /**
@@ -19,10 +20,10 @@ import lombok.AllArgsConstructor;
  * @since 1.0.0
  */
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ConfigurationCheck implements ApplicationListener<ApplicationReadyEvent> {
 
-	private AConfig aConfig;
+	private final AConfig aConfig;
 
 	@Override
 	public void onApplicationEvent(ApplicationReadyEvent event) {

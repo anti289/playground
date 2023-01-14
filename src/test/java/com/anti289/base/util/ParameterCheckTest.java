@@ -1,4 +1,4 @@
-package com.anti289.wcd.util;
+package com.anti289.base.util;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;

@@ -33,12 +33,12 @@ public class ParameterCheck {
 	/**
 	 * Checks the given String; if it is null or blank, an {@link IllegalArgumentServiceException} will be thrown, passing the name as i18n argument
 	 *
-	 * @param str  the String to be checked
-	 * @param name of the String to inform the caller
+	 * @param obj  the {@link Object} to be checked
+	 * @param name of the Object to inform the caller
 	 * @throws IllegalArgumentServiceException if o is null
 	 */
-	public static void notNullOrBlank(String str, String name) throws ServiceException {
-		if (str == null || str.isBlank()) {
+	public static void notNullOrBlank(Object obj, String name) throws ServiceException {
+		if (obj == null || obj.toString().isBlank()) {
 			throw new MissingArgumentServiceException(name);
 		}
 	}

@@ -45,9 +45,17 @@ public class RestExceptionHandler {
 	}
 
 	@ExceptionHandler(value = ConflictServiceException.class)
-	@ResponseStatus(HttpStatus.NOT_FOUND)
+	@ResponseStatus(HttpStatus.CONFLICT)
 	public ErrorResponse conflictErrorHandler(ServiceException e) {
 		log.log(Level.INFO, "Conflict returned", e);
+
+		return new ErrorResponse(e);
+	}
+
+	@ExceptionHandler(value = ServiceException.class)
+	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+	public ErrorResponse serviceExceptionHandler(ServiceException e) {
+		log.log(Level.SEVERE, "General internal error returned", e);
 
 		return new ErrorResponse(e);
 	}

@@ -1,4 +1,7 @@
 package com.anti289.wcd.dto;
 
-public record User(long id, String externalId, String name) {
+import java.util.UUID;
+
+
+public record User(UUID id, String externalId, String name) {
 }
